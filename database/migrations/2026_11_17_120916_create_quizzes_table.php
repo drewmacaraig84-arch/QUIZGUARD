@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('teacher_id')->constrained('users', 'user_id');
             $table->foreignId('bank_id')->constrained('question_banks', 'bank_id');
             $table->foreignId('subject_id')->constrained('subjects', 'subject_id');
-            $table->string('title', 100);
+            $table->string('title', 45);
             $table->string('section', 45);
             $table->integer('time_limit_min');
             $table->integer('max_violation')->default(3);
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('shuffle_answers')->default(false);
             $table->string('grading_method', 45)->default('highest');
             $table->timestamp('open_at')->nullable();
+            $table->string('status', 45)->default('active');
             $table->timestamp('closed_at')->nullable();
             $table->timestamps();
         });

@@ -13,6 +13,7 @@ class QuestionBank extends Model
         'subject_id',
         'bank_title',
         'source_file_name',
+        'status',
         'uploaded_at',
     ];
 

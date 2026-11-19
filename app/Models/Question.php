@@ -15,6 +15,7 @@ class Question extends Model
         'options',
         'correct_answers',
         'points',
+        'status',
     ];
 
     public function bank()

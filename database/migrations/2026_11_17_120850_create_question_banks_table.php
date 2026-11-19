@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('subject_id')->constrained('subjects', 'subject_id');
             $table->string('bank_title', 100);
             $table->string('source_file_name', 255);
+            $table->string('status', 45)->default('active');
             $table->timestamp('uploaded_at')->useCurrent();
             $table->timestamps();
         });

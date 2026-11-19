@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('subject_id');
             $table->string('subject_code', 45);
             $table->string('subject_name', 100);
+            $table->string('status', 45)->default('active');
             $table->timestamps();
         });
     }

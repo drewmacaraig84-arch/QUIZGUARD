@@ -23,10 +23,22 @@ class Quiz extends Model
         'shuffle_answers',
         'grading_method',
         'open_at',
+        'status',
         'closed_at',
     ];
 
-     public function bank()
+    protected $casts = [
+        'open_at'   => 'datetime',
+        'closed_at' => 'datetime',
+    ];
+
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id', 'subject_id');
+    }
+
+    public function bank()
     {
         return $this->belongsTo(QuestionBank::class, 'bank_id');
     }

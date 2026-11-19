@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('options')->nullable();
             $table->string('correct_answers', 255);
             $table->integer('points')->default(1);
+            $table->string('status', 45)->default('active');
             $table->timestamps();
         });
     }

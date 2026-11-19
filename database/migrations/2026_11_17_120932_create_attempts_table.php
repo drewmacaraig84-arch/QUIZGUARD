@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('started_at')->useCurrent();
             $table->timestamp('submitted_at')->nullable();
             $table->integer('score')->default(0);
+            $table->integer('total_points')->default(0); 
             $table->string('status', 45)->default('ongoing');
             $table->integer('violation_count')->default(0);
             $table->timestamps();
