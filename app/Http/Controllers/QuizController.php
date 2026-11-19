@@ -93,4 +93,22 @@ class QuizController extends Controller
 
         return redirect('/teacher/quizzes')->with('success', 'Quiz created.');
     }
+
+    // shows the questions inside one bank
+    // teacher can see the correct answers
+    public function show($id)
+    {
+        $bank = QuestionBank::with('subject')
+            ->where('bank_id', $id)
+            ->where('teacher_id', Auth::id())
+            ->where('status', 'active')
+            ->firstOrFail();
+
+        $questions = Question::where('bank_id', $bank->bank_id)
+            ->where('status', 'active')
+            ->orderBy('question_id')
+            ->get();   // options is JSON text: json_decode it in the view
+
+        return view('teacher.bank_questions', ['bank' => $bank, 'questions' => $questions]);
+    }
 }

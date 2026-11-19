@@ -18,11 +18,14 @@ return new class extends Migration
             $table->string('first_name', 45);
             $table->string('middle_name', 45)->nullable();
             $table->string('last_name', 45);
-            $table->string('dwcc_email', 100)->unique();
+            $table->string('dwcc_email', 45)->unique();
             $table->string('password_hash', 255);
             $table->string('department', 45);
             $table->string('section', 45)->nullable();
             $table->string('status', 45)->default('active');
+            $table->string('otp_hash', 255)->nullable();       // the code is stored hashed never plain
+            $table->timestamp('otp_expires_at')->nullable();   // codes expire
+            $table->integer('otp_attempts')->default(0);       // wrong tries on the current code
             $table->timestamps();
         });
     }
