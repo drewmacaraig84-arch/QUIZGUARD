@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,25 @@ class SubjectController extends Controller
     {
         $subjects = Subject::orderBy('subject_code')->get();
 
-        return view('admin.subjects', ['subjects' => $subjects]);
+        $sections = User::where('role', 'student')
+            ->whereNotNull('section')
+            ->selectRaw('section, COUNT(*) as total')   // how many students per section
+            ->groupBy('section')
+            ->orderBy('section')
+            ->get();
+
+        $stats = [
+            'sections' => $sections->count(),
+            'subjects' => $subjects->where('status', 'active')->count(),
+            'students' => User::where('role', 'student')->count(),
+            'teachers' => User::where('role', 'teacher')->count(),
+        ];
+
+        return view('admin.sections-subjects', [
+            'subjects' => $subjects,
+            'sections' => $sections,
+            'stats'    => $stats,
+        ]);
     }
 
     // creates a new subject
@@ -34,7 +53,7 @@ class SubjectController extends Controller
 
         ActivityLog::record(Auth::user()->school_id_num, Auth::user()->role, 'SUBJECT_CREATED', 'Created subject: ' . $subject->subject_code);
 
-        return redirect('/admin/subjects')->with('success', 'Subject added.');
+        return redirect('/admin/sections-subjects')->with('success', 'Subject added.');
     }
 
     // soft delete: switches between active and inactive
@@ -46,6 +65,6 @@ class SubjectController extends Controller
 
         ActivityLog::record(Auth::user()->school_id_num, Auth::user()->role, 'SUBJECT_' . strtoupper($subject->status), 'Set subject ' . $subject->subject_code . ' to ' . $subject->status);
 
-        return redirect('/admin/subjects')->with('success', 'Subject is now ' . $subject->status . '.');
+        return redirect('/admin/sections-subjects')->with('success', 'Subject is now ' . $subject->status . '.');
     }
 }

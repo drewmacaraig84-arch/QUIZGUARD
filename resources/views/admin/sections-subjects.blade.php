@@ -3,47 +3,38 @@
 @section('title', 'Sections & Subjects')
 
 @section('content')
-<!-- ============================================================ -->
-<!-- SCREEN 3: SECTIONS & SUBJECTS                                -->
-<!-- ============================================================ -->
-
 <!-- Top Title and Action Buttons -->
 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
     <div>
         <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Sections & Subjects</h1>
-        <p class="text-xs text-slate-500 mt-1">Manage class sections and the subjects assigned to them.</p>
+        <p class="text-xs text-slate-500 mt-1">Class sections come from the students. Subjects are managed here.</p>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="flex items-center gap-3">
-        <!-- Add Section Button -->
-        <button type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-medium transition shadow-xs">
-            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Add Section
-        </button>
-
-        <!-- Add Subject Button -->
-        <button type="button" class="inline-flex items-center gap-2 px-4 py-2 bg-[#11422d] hover:bg-[#0d3423] text-white rounded-xl text-xs font-medium transition shadow-xs">
+    <!-- Add Subject (opens without JavaScript) -->
+    <details class="relative">
+        <summary class="list-none cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-[#11422d] hover:bg-[#0d3423] text-white rounded-xl text-xs font-medium transition shadow-xs">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
             Add Subject
-        </button>
-    </div>
+        </summary>
+        <form method="POST" action="/admin/subjects" class="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-lg p-4 space-y-2 z-30">
+            @csrf
+            <input name="subject_code" value="{{ old('subject_code') }}" placeholder="Code (e.g. ITP108L)" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs">
+            <input name="subject_name" value="{{ old('subject_name') }}" placeholder="Subject name" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs">
+            <button type="submit" class="w-full px-4 py-2 bg-[#11422d] text-white rounded-xl text-xs font-medium">Save subject</button>
+        </form>
+    </details>
 </div>
 
-<!-- ========================================== -->
-<!-- 1. STAT CARDS ROW (4 Cards)                -->
-<!-- ========================================== -->
+<!-- 1. STAT CARDS ROW -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
     <!-- Card 1: Sections -->
     <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
         <div>
-            <p class="text-2xl font-bold text-slate-900 tracking-tight">12</p>
+            <p class="text-2xl font-bold text-slate-900 tracking-tight">{{ $stats['sections'] }}</p>
             <p class="text-xs text-slate-500 mt-0.5 font-medium">Sections</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Current term</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">With enrolled students</p>
         </div>
         <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -55,9 +46,9 @@
     <!-- Card 2: Subjects -->
     <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
         <div>
-            <p class="text-2xl font-bold text-slate-900 tracking-tight">9</p>
+            <p class="text-2xl font-bold text-slate-900 tracking-tight">{{ $stats['subjects'] }}</p>
             <p class="text-xs text-slate-500 mt-0.5 font-medium">Subjects</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Offered this term</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Active</p>
         </div>
         <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -69,9 +60,9 @@
     <!-- Card 3: Students -->
     <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
         <div>
-            <p class="text-2xl font-bold text-slate-900 tracking-tight">298</p>
+            <p class="text-2xl font-bold text-slate-900 tracking-tight">{{ $stats['students'] }}</p>
             <p class="text-xs text-slate-500 mt-0.5 font-medium">Students</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Enrolled across sections</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Across all sections</p>
         </div>
         <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -83,9 +74,9 @@
     <!-- Card 4: Teachers -->
     <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
         <div>
-            <p class="text-2xl font-bold text-slate-900 tracking-tight">38</p>
+            <p class="text-2xl font-bold text-slate-900 tracking-tight">{{ $stats['teachers'] }}</p>
             <p class="text-xs text-slate-500 mt-0.5 font-medium">Teachers</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Assigned to sections</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Registered</p>
         </div>
         <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -95,9 +86,7 @@
     </div>
 </div>
 
-<!-- ========================================== -->
-<!-- 2. TWO-COLUMN SPLIT TABLES                 -->
-<!-- ========================================== -->
+<!-- 2. TWO-COLUMN SPLIT TABLES -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
     <!-- LEFT COLUMN: SECTIONS TABLE -->
@@ -105,7 +94,7 @@
         <div>
             <div class="p-6 border-b border-slate-100">
                 <h2 class="text-base font-bold text-slate-900">Sections</h2>
-                <p class="text-xs text-slate-500">Class sections and their advisers</p>
+                <p class="text-xs text-slate-500">Taken from the students' sections</p>
             </div>
 
             <div class="overflow-x-auto">
@@ -113,121 +102,25 @@
                     <thead>
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="py-3 px-6 font-medium">Section</th>
-                            <th class="py-3 px-6 font-medium">Adviser</th>
                             <th class="py-3 px-6 font-medium">Students</th>
-                            <th class="py-3 px-6 font-medium">Subjects</th>
-                            <th class="py-3 px-6 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
-                        <!-- Row 1: BSIT 1A -->
+                        @forelse ($sections as $section)
                         <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 1A</td>
-                            <td class="py-3.5 px-6 text-slate-600">Roberto Aquino</td>
-                            <td class="py-3.5 px-6 text-slate-600">38</td>
-                            <td class="py-3.5 px-6 text-slate-600">5</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                    </button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete">
-                                        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                    </button>
-                                </div>
-                            </td>
+                            <td class="py-3.5 px-6 font-bold text-slate-900">{{ $section->section }}</td>
+                            <td class="py-3.5 px-6 text-slate-600">{{ $section->total }}</td>
                         </tr>
-
-                        <!-- Row 2: BSIT 2A -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 2A</td>
-                            <td class="py-3.5 px-6 text-slate-600">Angelica Reyes</td>
-                            <td class="py-3.5 px-6 text-slate-600">41</td>
-                            <td class="py-3.5 px-6 text-slate-600">6</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 3: BSIT 2B -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 2B</td>
-                            <td class="py-3.5 px-6 text-slate-600">Patricia Lim</td>
-                            <td class="py-3.5 px-6 text-slate-600">39</td>
-                            <td class="py-3.5 px-6 text-slate-600">6</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 4: BSIT 3A -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 3A</td>
-                            <td class="py-3.5 px-6 text-slate-600">Angelica Reyes</td>
-                            <td class="py-3.5 px-6 text-slate-600">42</td>
-                            <td class="py-3.5 px-6 text-slate-600">7</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 5: BSIT 3B -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 3B</td>
-                            <td class="py-3.5 px-6 text-slate-600">Marco Salvador</td>
-                            <td class="py-3.5 px-6 text-slate-600">37</td>
-                            <td class="py-3.5 px-6 text-slate-600">7</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 6: BSIT 4A -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 4A</td>
-                            <td class="py-3.5 px-6 text-slate-600">Liza Navarro</td>
-                            <td class="py-3.5 px-6 text-slate-600">33</td>
-                            <td class="py-3.5 px-6 text-slate-600">5</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 7: BSIT 4B -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">BSIT 4B</td>
-                            <td class="py-3.5 px-6 text-slate-600">Roberto Aquino</td>
-                            <td class="py-3.5 px-6 text-slate-600">35</td>
-                            <td class="py-3.5 px-6 text-slate-600">5</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
+                        @empty
+                        <tr><td colspan="2" class="py-8 px-6 text-center text-slate-400">No sections yet. They appear when students are added.</td></tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="px-6 py-4 border-t border-slate-100 text-xs text-slate-500">
-            Showing <span class="font-semibold text-slate-700">1-7</span> of <span class="font-semibold text-slate-700">12</span> sections
+            <span class="font-semibold text-slate-700">{{ $sections->count() }}</span> sections
         </div>
     </div>
 
@@ -236,7 +129,7 @@
         <div>
             <div class="p-6 border-b border-slate-100">
                 <h2 class="text-base font-bold text-slate-900">Subjects</h2>
-                <p class="text-xs text-slate-500">Subjects and their assigned teachers</p>
+                <p class="text-xs text-slate-500">Subjects offered</p>
             </div>
 
             <div class="overflow-x-auto">
@@ -245,111 +138,40 @@
                         <tr class="text-slate-400 border-b border-slate-100 bg-slate-50/50">
                             <th class="py-3 px-6 font-medium">Code</th>
                             <th class="py-3 px-6 font-medium">Subject</th>
-                            <th class="py-3 px-6 font-medium">Teacher</th>
+                            <th class="py-3 px-6 font-medium">Status</th>
                             <th class="py-3 px-6 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
-                        <!-- Row 1: ITP102 -->
+                        @forelse ($subjects as $subject)
                         <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP102</td>
-                            <td class="py-3.5 px-6 text-slate-600">Data Structures</td>
-                            <td class="py-3.5 px-6 text-slate-600">Patricia Lim</td>
+                            <td class="py-3.5 px-6 font-bold text-slate-900">{{ $subject->subject_code }}</td>
+                            <td class="py-3.5 px-6 text-slate-600">{{ $subject->subject_name }}</td>
+                            <td class="py-3.5 px-6">
+                                @if ($subject->status === 'active')
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60">Active</span>
+                                @else
+                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">Inactive</span>
+                                @endif
+                            </td>
                             <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
+                                <form method="POST" action="/admin/subjects/{{ $subject->subject_id }}/toggle">
+                                    @csrf
+                                    <button type="submit" class="text-xs font-medium text-slate-600 hover:text-slate-900">{{ $subject->status === 'active' ? 'Deactivate' : 'Activate' }}</button>
+                                </form>
                             </td>
                         </tr>
-
-                        <!-- Row 2: ITP104 -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP104</td>
-                            <td class="py-3.5 px-6 text-slate-600">Advanced Database</td>
-                            <td class="py-3.5 px-6 text-slate-600">Angelica Reyes</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 3: ITP106 -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP106</td>
-                            <td class="py-3.5 px-6 text-slate-600">Web Development</td>
-                            <td class="py-3.5 px-6 text-slate-600">Roberto Aquino</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 4: ITP108L -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP108L</td>
-                            <td class="py-3.5 px-6 text-slate-600">Systems Integration & Architecture</td>
-                            <td class="py-3.5 px-6 text-slate-600">Angelica Reyes</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 5: ITP110 -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP110</td>
-                            <td class="py-3.5 px-6 text-slate-600">Networking 2</td>
-                            <td class="py-3.5 px-6 text-slate-600">Marco Salvador</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 6: ITP112 -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP112</td>
-                            <td class="py-3.5 px-6 text-slate-600">Information Assurance</td>
-                            <td class="py-3.5 px-6 text-slate-600">Liza Navarro</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- Row 7: ITP114 -->
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-6 font-bold text-slate-900">ITP114</td>
-                            <td class="py-3.5 px-6 text-slate-600">Capstone Project 1</td>
-                            <td class="py-3.5 px-6 text-slate-600">Roberto Aquino</td>
-                            <td class="py-3.5 px-6 text-right">
-                                <div class="inline-flex items-center gap-2 text-slate-400">
-                                    <button type="button" class="hover:text-slate-700 transition" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
-                                    <button type="button" class="hover:text-rose-600 transition" title="Delete"><svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                </div>
-                            </td>
-                        </tr>
+                        @empty
+                        <tr><td colspan="4" class="py-8 px-6 text-center text-slate-400">No subjects yet.</td></tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="px-6 py-4 border-t border-slate-100 text-xs text-slate-500">
-            Showing <span class="font-semibold text-slate-700">1-7</span> of <span class="font-semibold text-slate-700">9</span> subjects
+            <span class="font-semibold text-slate-700">{{ $subjects->count() }}</span> subjects
         </div>
     </div>
-
 </div>
 @endsection
-

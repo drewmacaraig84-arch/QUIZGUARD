@@ -16,4 +16,11 @@ class ViolationLog extends Model
         'duration_seconds',
         'question_id',
     ];
+
+    protected $casts = ['occurred_at' => 'datetime'];
+
+    public function attempt()
+    {
+        return $this->belongsTo(Attempt::class, 'attempt_id');
+    }
 }
