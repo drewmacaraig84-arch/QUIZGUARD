@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\QuestionBankController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\StudentPortalController;
 use App\Http\Controllers\StudentQuizController;
 use App\Http\Controllers\TeacherResultController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,18 @@ Route::prefix('admin')->group(function () {
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
     Route::get('/sections-subjects', [AdminController::class, 'sectionsSubjects'])->name('admin.sections_subjects');
     Route::get('/logs', [AdminController::class, 'logs'])->name('admin.logs');
+});
+
+// ==========================================
+// Student Portal UI Preview Routes
+// ==========================================
+Route::prefix('student')->group(function () {
+    Route::get('/quizzes', [StudentPortalController::class, 'quizzes'])->name('student.quizzes');
+    Route::get('/instructions', [StudentPortalController::class, 'instructions'])->name('student.instructions');
+    Route::get('/exam', [StudentPortalController::class, 'exam'])->name('student.exam');
+    Route::get('/submitted', [StudentPortalController::class, 'submitted'])->name('student.submitted');
+    Route::get('/reviewer', [StudentPortalController::class, 'reviewer'])->name('student.reviewer');
+    Route::get('/profile', [StudentPortalController::class, 'profile'])->name('student.profile');
 });
 
 // ==========================================
@@ -76,7 +89,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/student/dashboard', [DashboardController::class, 'student']);
 
     // Quizzes the student can take
-    Route::get('/student/quizzes', [StudentQuizController::class, 'index']);
+    Route::get('/student/quizzes-backend', [StudentQuizController::class, 'index']);
     Route::post('/student/quizzes/{id}/start', [StudentQuizController::class, 'start']);
 
     // Take the quiz
